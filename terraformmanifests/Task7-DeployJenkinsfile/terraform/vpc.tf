@@ -1,28 +1,13 @@
 data "aws_availability_zones" "azs" {}
-module "myapp-vpc" {
-  source          = "terraform-aws-modules/vpc/aws"
-  version         = "3.19.0"
-  name            = "myapp-vpc"
-  cidr            = var.vpc_cidr_block
-  private_subnets = var.private_subnet_cidr_blocks
-  public_subnets  = var.public_subnet_cidr_blocks
-  azs             = data.aws_availability_zones.azs.names
-
-  # enable_nat_gateway   = true
-  # single_nat_gateway   = true
-  enable_dns_hostnames = true
-
-  tags = {
-    "kubernetes.io/cluster/myapp-eks-cluster" = "shared"
-  }
-
-  public_subnet_tags = {
-    "kubernetes.io/cluster/myapp-eks-cluster" = "shared"
-    "kubernetes.io/role/elb"                  = 1
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/cluster/myapp-eks-cluster" = "shared"
-    "kubernetes.io/role/internal-elb"         = 1
-  }
+module "vpc" {
+  source                  = "../../Task7-JenkinCiCd/modules/vpc"
+  tags                    = "myvpc"
+  instance_tenancy        = "default"
+  vpc_cidr                = "10.0.0.0/16"
+  access_ip               = "0.0.0.0/0"
+  public_sn_count         = 2
+  availability_zone       = ["ap-south-1a", "ap-south-1b"]
+  public_cidrs            = ["10.0.1.0/24", "10.0.2.0/24"]
+  map_public_ip_on_launch = true
+  rt_route_cidr_block     = "0.0.0.0/0"
 }
