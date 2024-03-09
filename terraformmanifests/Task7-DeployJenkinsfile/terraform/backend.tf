@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-         bucket = "my-tf-test-bucket"
+         bucket = "my-kube-test-bucket-1"
           region = "ap-south-1"
           key  = "eks/terraform.tfstate"
   }
