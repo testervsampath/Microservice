@@ -7,25 +7,17 @@ pipeline {
         AWS_DEFAULT_REGION = "ap-south-1"
     }
     stages {
-        stage("Destroy EKS Cluster") {
+        
+        stage("Create an EKS Cluster") {
             steps {
                 script {
                     dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
-                          sh "terraform destroy -auto-approve"
+                        sh "terraform init"
+                        // sh "terraform apply -auto-approve"
                     }
                 }
             }
-        }  
-        // stage("Create an EKS Cluster") {
-        //     steps {
-        //         script {
-        //             dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
-        //                 sh "terraform init"
-        //                 sh "terraform apply -auto-approve"
-        //             }
-        //         }
-        //     }
-        // }
+        }
         // stage("Deploy to EKS") {
         //     steps {
         //         script {
@@ -37,5 +29,14 @@ pipeline {
         //         }
         //     }
         // }
+        stage("Destroy EKS Cluster") {
+            steps {
+                script {
+                    dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
+                          sh "terraform destroy -auto-approve"
+                    }
+                }
+            }
+        }  
     }
 }
