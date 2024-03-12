@@ -35,10 +35,22 @@ sudo apt update
 sudo apt install -y unzip
 
 # Download Terraform binary
-wget -q ${TERRAFORM_DOWNLOAD_URL} -O /tmp/terraform.zip
+if ! command -v wget &> /dev/null; then
+    echo "wget is not installed. Please install wget before running this script."
+    exit 1
+    else
+    wget -q ${TERRAFORM_DOWNLOAD_URL} -O /tmp/terraform.zip
+fi
+
+# Check if unzip is installed
+if ! command -v unzip &> /dev/null; then
+    echo "unzip is not installed. Please install unzip before running this script."
+    exit 1
+    else
+    sudo unzip -o /tmp/terraform.zip -d ${INSTALL_DIR}
+fi
 
 # Unzip the Terraform binary
-sudo unzip -o /tmp/terraform.zip -d ${INSTALL_DIR}
 
 # Remove the downloaded zip file
 rm -f /tmp/terraform.zip
