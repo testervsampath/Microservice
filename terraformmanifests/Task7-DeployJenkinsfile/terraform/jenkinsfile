@@ -44,6 +44,7 @@ pipeline {
             steps {
                 script {
                     dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
+                          sh "terraform init"
                           sh "terraform destroy -auto-approve"
                     }
                 }
