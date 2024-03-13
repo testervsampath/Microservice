@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 pipeline {
     agent any
-    parameters {
-        choice(name: 'Option', choices: ['Create', 'Option2', 'Option3'], description: 'Select an option')
-    }
+    // parameters {
+    //     choice(name: 'Option', choices: ['Create', 'Option2', 'Option3'], description: 'Select an option')
+    // }
     environment {
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
