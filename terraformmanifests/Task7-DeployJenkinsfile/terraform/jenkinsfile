@@ -29,7 +29,7 @@ pipeline {
             }
             steps {
                 script {
-                    dir('kubernetes') {
+                    dir('terraformmanifests/Task7-DeployJenkinsfile/kubernetes') {
                         sh "aws eks update-kubeconfig --name module-eks-1"
                         sh "kubectl apply -f nginx-deployment.yml"
                         sh "kubectl apply -f nginx-service.yml"
