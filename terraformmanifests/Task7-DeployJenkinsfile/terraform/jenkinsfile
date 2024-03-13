@@ -15,7 +15,7 @@ pipeline {
                 script {
                     dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
                         sh "terraform init"
-                        sh "terraform apply -auto-approve"
+                        // sh "terraform apply -auto-approve"
                     }
                 }
             }
@@ -24,21 +24,21 @@ pipeline {
             steps {
                 script {
                     dir('kubernetes') {
-                        sh "aws eks update-kubeconfig --name myapp-eks-cluster"
+                        sh "aws eks update-kubeconfig --name module-eks-1"
                         sh "kubectl apply -f nginx-deployment.yaml"
                         sh "kubectl apply -f nginx-service.yaml"
                     }
                 }
             }
         }
-        // stage("Destroy EKS Cluster") {
-        //     steps {
-        //         script {
-        //             dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
-        //                   sh "terraform destroy -auto-approve"
-        //             }
-        //         }
-        //     }
-        // }  
+        stage("Destroy EKS Cluster") {
+            steps {
+                script {
+                    dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
+                          sh "terraform destroy -auto-approve"
+                    }
+                }
+            }
+        }  
     }
 }
