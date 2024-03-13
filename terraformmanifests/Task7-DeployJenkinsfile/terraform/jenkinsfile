@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 pipeline {
     agent any
-    // parameters {
-    //     choice(name: 'Option', choices: ['Create', 'Option2', 'Option3'], description: 'Select an option')
-    // }
+    parameters {
+        choice(name: 'ToExecute', choices: ['Create', 'Delete'], description: 'Select an option')
+    }
     environment {
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
@@ -11,27 +11,36 @@ pipeline {
     }
     stages {
         stage("Create an EKS Cluster") {
+           when {
+                expression { params.ToExecute != 'Create' }
+            }
             steps {
                 script {
                     dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
                         sh "terraform init"
-                        // sh "terraform apply -auto-approve"
+                        sh "terraform apply -auto-approve"
                     }
                 }
             }
         }
         stage("Deploy to EKS") {
+             when {
+                expression { params.ToExecute != 'Create' }
+            }
             steps {
                 script {
                     dir('kubernetes') {
-                        // sh "aws eks update-kubeconfig --name module-eks-1"
-                        // sh "kubectl apply -f nginx-deployment.yaml"
-                        // sh "kubectl apply -f nginx-service.yaml"
+                        sh "aws eks update-kubeconfig --name module-eks-1"
+                        sh "kubectl apply -f nginx-deployment.yaml"
+                        sh "kubectl apply -f nginx-service.yaml"
                     }
                 }
             }
         }
         stage("Destroy EKS Cluster") {
+            when {
+                expression { params.ToExecute != 'Delete' }
+            }
             steps {
                 script {
                     dir('terraformmanifests/Task7-DeployJenkinsfile/terraform') {
