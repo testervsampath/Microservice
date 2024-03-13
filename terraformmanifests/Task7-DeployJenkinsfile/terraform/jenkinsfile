@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage("Create an EKS Cluster") {
            when {
-                expression { params.ToExecute != 'Create' }
+                expression { params.ToExecute == 'Create' }
             }
             steps {
                 script {
@@ -25,7 +25,7 @@ pipeline {
         }
         stage("Deploy to EKS") {
              when {
-                expression { params.ToExecute != 'Create' }
+                expression { params.ToExecute == 'Create' }
             }
             steps {
                 script {
@@ -39,7 +39,7 @@ pipeline {
         }
         stage("Destroy EKS Cluster") {
             when {
-                expression { params.ToExecute != 'Delete' }
+                expression { params.ToExecute == 'Delete' }
             }
             steps {
                 script {
